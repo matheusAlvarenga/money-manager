@@ -7,13 +7,15 @@ import org.junit.jupiter.api.Test;
 import com.alvarenga.domain.User;
 import com.alvarenga.domain.exceptions.ValidationException;
 
+import domain.builders.UserBuilder;
+
 @DisplayName("Domain: User")
 public class TestUser {
 
   @Test
   @DisplayName("Should create a valid user")
   public void shouldCreateValidUser() {
-    User user = new User(1L, "Valid name", "valid_email@mail.com", "valid_password");
+    User user = UserBuilder.oneUser().build();
 
     Assertions.assertAll(
         "User Assertions",
@@ -29,7 +31,7 @@ public class TestUser {
   public void shouldThrowIfNameIsNull() {
     ValidationException exception = Assertions.assertThrows(
         ValidationException.class,
-        () -> new User(1L, null, "valid_email@mail.com", "valid_password"));
+        () -> UserBuilder.oneUser().withName(null).build());
 
     Assertions.assertEquals("Name cannot be null or empty", exception.getMessage());
   }
@@ -39,7 +41,7 @@ public class TestUser {
   public void shouldThrowIfNameIsEmpty() {
     ValidationException exception = Assertions.assertThrows(
         ValidationException.class,
-        () -> new User(1L, "", "valid_email@mail.com", "valid_password"));
+        () -> UserBuilder.oneUser().withName("").build());
 
     Assertions.assertEquals("Name cannot be null or empty", exception.getMessage());
   }
