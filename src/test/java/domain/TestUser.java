@@ -45,4 +45,44 @@ public class TestUser {
 
     Assertions.assertEquals("Name cannot be null or empty", exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Should throw a ValidationException if email is null")
+  public void shouldThrowIfEmailIsNull() {
+    ValidationException exception = Assertions.assertThrows(
+        ValidationException.class,
+        () -> UserBuilder.oneUser().withEmail(null).build());
+
+    Assertions.assertEquals("Email cannot be null or empty", exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Should throw a ValidationException if email is empty")
+  public void shouldThrowIfEmailIsEmpty() {
+    ValidationException exception = Assertions.assertThrows(
+        ValidationException.class,
+        () -> UserBuilder.oneUser().withEmail("").build());
+
+    Assertions.assertEquals("Email cannot be null or empty", exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Should throw a ValidationException if password is null")
+  public void shouldThrowIfPasswordIsNull() {
+    ValidationException exception = Assertions.assertThrows(
+        ValidationException.class,
+        () -> UserBuilder.oneUser().withPassword(null).build());
+
+    Assertions.assertEquals("Password cannot be null or empty", exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Should throw a ValidationException if password is empty")
+  public void shouldThrowIfPasswordIsEmpty() {
+    ValidationException exception = Assertions.assertThrows(
+        ValidationException.class,
+        () -> UserBuilder.oneUser().withPassword("").build());
+
+    Assertions.assertEquals("Password cannot be null or empty", exception.getMessage());
+  }
 }
