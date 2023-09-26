@@ -1,6 +1,7 @@
 package com.alvarenga.domain;
 
 import com.alvarenga.domain.exceptions.ValidationException;
+import java.util.Objects;
 
 public class User {
   private Long id;
@@ -42,4 +43,20 @@ public class User {
     return this.password;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (o == this)
+      return true;
+    if (!(o instanceof User)) {
+      return false;
+    }
+    User user = (User) o;
+    return Objects.equals(name, user.name)
+        && Objects.equals(email, user.email) && Objects.equals(password, user.password);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, email, password);
+  }
 }
