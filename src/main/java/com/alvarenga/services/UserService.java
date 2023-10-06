@@ -1,5 +1,7 @@
 package com.alvarenga.services;
 
+import java.util.Optional;
+
 import com.alvarenga.domain.User;
 import com.alvarenga.domain.exceptions.ValidationException;
 import com.alvarenga.repositories.UserRepository;
@@ -18,5 +20,9 @@ public class UserService {
     }
 
     return this.userRepository.save(user);
+  }
+
+  public Optional<User> getUserByEmail(String email) {
+    return this.userRepository.getUserByEmail(email);
   }
 }

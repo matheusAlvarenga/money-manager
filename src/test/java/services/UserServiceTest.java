@@ -1,25 +1,41 @@
 package services;
 
+import static org.mockito.ArgumentMatchers.any;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import com.alvarenga.domain.User;
+import com.alvarenga.repositories.UserRepository;
 import com.alvarenga.services.UserService;
 
 import domain.builders.UserBuilder;
-import infrastructure.dummies.UserDummyRepository;
 
 public class UserServiceTest {
   private UserService userService;
 
   @Test
-  public void shouldSaveUser() {
-    userService = new UserService(new UserDummyRepository());
+  public void shouldReturnEmptyIfUserIsUnexistent() {
+    UserRepository repository = Mockito.mock(UserRepository.class);
 
-    User user = UserBuilder.oneUser().withId(null).withEmail("unexistent_email@mail.com").build();
+    userService = new UserService(repository);
 
-    User savedUser = userService.save(user);
+    Optional<User> user = userService.getUserByEmail("unexistent_email@mail.com");
+    Assertions.assertTrue(user.isEmpty());
+  }
 
-    Assertions.assertNotNull(savedUser.getId());
+  @Test
+  public void shouldReturnUserIfUserIsExistent() {
+    UserRepository repository = Mockito.mock(UserRepository.class);
+
+    userService = new UserService(repository);
+
+    Mockito.when(repository.getUserByEmail(any())).thenReturn(Optional.of(UserBuilder.oneUser().build()));
+
+    Optional<User> user = userService.getUserByEmail("unexistent_email@mail.com");
+    Assertions.assertTrue(user.isPresent());
   }
 }
