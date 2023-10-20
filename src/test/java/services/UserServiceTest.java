@@ -7,7 +7,12 @@ import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.alvarenga.domain.User;
 import com.alvarenga.repositories.UserRepository;
@@ -15,16 +20,12 @@ import com.alvarenga.services.UserService;
 
 import domain.builders.UserBuilder;
 
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
-  private UserService userService;
+  @Mock
   private UserRepository repository;
-
-  @BeforeEach
-  public void setup() {
-    repository = Mockito.mock(UserRepository.class);
-
-    userService = new UserService(repository);
-  }
+  @InjectMocks
+  private UserService userService;
 
   @Test
   public void shouldReturnEmptyIfUserIsUnexistent() {
