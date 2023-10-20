@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.alvarenga.domain.User;
+import com.alvarenga.domain.exceptions.ValidationException;
 import com.alvarenga.repositories.UserRepository;
 import com.alvarenga.services.UserService;
 
@@ -52,5 +53,21 @@ public class UserServiceTest {
     Assertions.assertNotNull(savedUser.getId());
 
     Mockito.verify(repository).getUserByEmail(userToSave.getEmail());
+  }
+
+  @Test
+  public void shouldRejectAnExistentUser() {
+    Mockito.when(repository.getUserByEmail(any())).thenReturn(Optional.of(UserBuilder.oneUser().build()));
+
+    User userToSave = UserBuilder.oneUser().withId(null).build();
+
+    ValidationException exception = Assertions.assertThrows(ValidationException.class, () -> {
+      userService.save(userToSave);
+    });
+
+    Assertions.assertTrue(exception.getMessage().contains("já existe"));
+
+    Mockito.verify(repository).getUserByEmail(userToSave.getEmail());
+    Mockito.verify(repository, Mockito.never()).save(userToSave);
   }
 }
